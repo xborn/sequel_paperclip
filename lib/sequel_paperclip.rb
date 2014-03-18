@@ -43,7 +43,7 @@ module Sequel
           self.attachments_definitions = attachments_definitions.merge(name => options)
 
           columns = db_schema.keys
-          unless columns.include?(:"#{name}_filename") || columns.include?(:"#{name}_basename")
+          unless instance_methods.include?(:"#{name}_filename") || instance_methods.include?(:"#{name}_basename")
             raise ArgumentError, "a column named #{name}_filename or #{name}_basename has to exist"
           end
 
