@@ -8,8 +8,8 @@ module Sequel
   module Plugins
     module Paperclip
       def self.apply(model, opts={}, &block)
-        model.class_attribute :attachments
-        model.attachments = {}
+        model.class_attribute :attachments_definitions
+        model.attachments_definitions = {}
       end
 
       def self.configure(model, opts={}, &block)
@@ -40,7 +40,7 @@ module Sequel
           attr_accessor name
 
           Attachment.preprocess_options(options)
-          self.attachments = attachments.merge(name => options)
+          self.attachments_definitions = attachments_definitions.merge(name => options)
 
           columns = db_schema.keys
           unless columns.include?(:"#{name}_filename") || columns.include?(:"#{name}_basename")
@@ -150,7 +150,7 @@ module Sequel
         end
 
         def after_destroy
-          self.class.attachments.each_key do |name|
+          self.class.attachments_definitions.each_key do |name|
             send("#{name}=", nil)
           end
 
